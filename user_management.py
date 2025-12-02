@@ -14,9 +14,6 @@ def insertUser(username, DoB, salt_str, hashedpw_str):
     con.close()
 
 
-# user_management.py (FIXED)
-
-
 def retrieveUsers(username):
     con = sql.connect("database_files/database.db")
     cur = con.cursor()
@@ -35,8 +32,6 @@ def retrieveUsers(username):
         con.close()
         return False
     else:
-        # statement is looking up for user with password, not checking if it is the same user as username
-        # Plain text log of visitor count as requested by Unsecure PWA management
         with open("visitor_log.txt", "r") as file:
             number = int(file.read().strip())
             number += 1
