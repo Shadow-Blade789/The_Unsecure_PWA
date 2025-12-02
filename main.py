@@ -64,7 +64,15 @@ def home():
     elif request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        isLoggedIn = dbHandler.retrieveUsers(username, password)
+        user_record = dbHandler.retrieveUsers(username)
+        isLoggedIn = False
+        if user_record:
+            username_db, salt_db, hashedpw_db = user_record
+            password_bytes = password.encode("utf-8")
+            hashedpw_bytes = hashedpw_db.encode("utf-8")
+            if bcrypt.checkpw(password_bytes, hashedpw_bytes):
+                isLoggedIn = True
+
         if isLoggedIn:
             dbHandler.listFeedback()
             return render_template("/success.html", value=username, state=isLoggedIn)

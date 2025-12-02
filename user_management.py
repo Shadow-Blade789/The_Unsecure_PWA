@@ -14,13 +14,23 @@ def insertUser(username, DoB, salt_str, hashedpw_str):
     con.close()
 
 
-def retrieveUsers(username, password):
+# user_management.py (FIXED)
+
+
+def retrieveUsers(username):
     con = sql.connect("database_files/database.db")
     cur = con.cursor()
     cur.execute(
-        "SELECT * FROM users WHERE username == ? AND password == ?",
-        (username, password),
+        "SELECT username, salt, hashedpw FROM users WHERE username = ?",
+        (username,),
     )
+    user_record = cur.fetchone()
+    con.close()
+    if user_record:
+        # user_record is (username, salt_str, hashedpw_str)
+        return user_record
+    else:
+        return None
     if cur.fetchone() == None:
         con.close()
         return False
